@@ -10,7 +10,7 @@ Muchas de las funciones reciben como argumento la dirección de memoria del graf
 
 #### Programas de ejemplo
 
-**Creación de un grafo vacío de 10 nodos**
+**Creación de un grafo vacío de 10 nodos:**
 ```C
 #include <igraph.h>
 
@@ -27,7 +27,7 @@ int main()
 }
 ```
 
-**Creación de vectores**
+**Creación de vectores:**
 ```C
 igraph_vector_t vector;
 
@@ -41,7 +41,7 @@ igraph_vector_size(&vector);
 VECTOR(vector)[0] = 10;
 ```
 
-**Creación de nodos y enlaces**
+**Creación de nodos y enlaces:**
 ```C
 igraph_t graph;
 
@@ -61,4 +61,11 @@ VECTOR(edges)[1] = 1;
 
 igraph_add_edges(&graph, &edges, 0);
 ```
+
+**Vecinos de un nodo:**
+igraph_vector_t neighbors;
+
+/* Guarda en neighbors los vecinos del vertice 0 */
+igraph_neighbors(&graph, &neighbors, 0, IGRAPH_ALL);
+
 
