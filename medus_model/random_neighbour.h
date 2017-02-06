@@ -3,6 +3,6 @@
 
 #include <igraph.h>
 
-int random_neighbour(igraph *, int, int);
+int random_neighbour(igraph_t *, int, int);
 
 #endif
