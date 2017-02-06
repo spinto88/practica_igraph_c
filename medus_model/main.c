@@ -15,7 +15,7 @@ int main(void)
 	init_network(&graph, N);
 
 	/* Init Axelrod agents */
-	agents = (axl_agent *)malloc(sizeof(axl_agent) * N);
+	agents = (axl_agent *) malloc(sizeof(axl_agent) * N);
 	init_agents(agents, N, AXELROD_F, AXELROD_Q, rand());
 
 	/* Do STEPS steps of dynamics */

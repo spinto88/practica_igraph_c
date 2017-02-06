@@ -8,7 +8,7 @@ int init_network(igraph_t *graph, int n)
 	VECTOR(dim)[0] = (int)sqrt(n);
 	VECTOR(dim)[1] = (int)sqrt(n);
 
-	igraph_lattice(graph, &dim, 0, 0, 0, 1);
+	igraph_lattice(graph, &dim, 0, 0, 0, 0);
 
 	return 1;
 }

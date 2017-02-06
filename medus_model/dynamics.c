@@ -8,6 +8,9 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 	int n = graph->n;
 
 	igraph_es_t es;
+	igraph_vector_t v;
+
+	igraph_vector_init(&v,2);
 
 	srand(seed);
 
@@ -25,11 +28,11 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 		if(random < hom)
 		{
 			if(hom != 1.00)
-				imitation(agents[agent], agents[neighbour], rand());	
+				imitation(&(agents[agent]), &(agents[neighbour]), rand());	
 			else
 				continue;
 		}
-		/*
+		
 		// Else, try to do rewiring 
 		else
 		{
@@ -42,19 +45,25 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 			// If the new homophily is larger than the old one, do a rewiring 
 			if(hom_aux > hom)
 			{
-				// Delete the old edge 
-				igraph_es_pairs_small(&es, IGRAPH_UNDIRECTED, agent, neighbour, -1);
-				igraph_delete_edges(graph, es);			
-
 				// Create the new edge 
-				igraph_add_edge(graph, agent, neighbour_aux);			
+//				igraph_add_edge(graph, agent, neighbour_aux);			
+
+				// Delete the old edge 
+				VECTOR(v)[0] = agent;
+				VECTOR(v)[1] = neighbour;
+
+				igraph_es_pairs(&es, &v, 0);
+//				igraph_delete_edges(graph, es);			
 			}
 			// Else, continue 
 			else
 				continue;
 		}
-		*/
+	
 	}
+
+	igraph_es_destroy(&es);
+	igraph_vector_destroy(&v);
 	
 	return 1;
 }
