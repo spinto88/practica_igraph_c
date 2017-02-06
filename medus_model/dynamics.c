@@ -1,16 +1,14 @@
 #include "dynamics.h"
 
-int dynamics(igraph_t *graph, axl_agent *agents, int seed)
+int dynamics(igraph_t graph, axl_agent *agents, int seed)
 {
 	int i;
 	int agent, neighbour, neighbour_aux;
 	double random, hom, hom_aux;
-	int n = graph->n;
+	int n = graph.n;
 
-	igraph_es_t es;
-	igraph_vector_t v;
-
-	igraph_vector_init(&v,2);
+	igraph_vector_t es;
+	igraph_vector_init(&es, 2);
 
 	srand(seed);
 
@@ -25,7 +23,7 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 		hom = homophily(agents[agent], agents[neighbour]);
 
 		/* If a random number is less than the homophily then imitate */
-		if(random < hom)
+		if(random <= hom)
 		{
 			if(hom != 1.00)
 				imitation(&(agents[agent]), &(agents[neighbour]), rand());	
@@ -46,14 +44,13 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 			if(hom_aux > hom)
 			{
 				// Create the new edge 
-//				igraph_add_edge(graph, agent, neighbour_aux);			
-
-				// Delete the old edge 
-				VECTOR(v)[0] = agent;
-				VECTOR(v)[1] = neighbour;
-
-				igraph_es_pairs(&es, &v, 0);
-//				igraph_delete_edges(graph, es);			
+				VECTOR(es)[0] = agent;
+				VECTOR(es)[1] = neighbour_aux;
+				igraph_add_edges(&graph, &es, 0);			
+/*
+				// Delete the old edge
+				igraph_es_pairs_small(&es, IGRAPH_UNDIRECTED, agent, neighbour, -1);
+				igraph_delete_edges(&graph, es);			*/
 			}
 			// Else, continue 
 			else
@@ -62,8 +59,7 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 	
 	}
 
-	igraph_es_destroy(&es);
-	igraph_vector_destroy(&v);
+//	igraph_es_destroy(&es);
 	
 	return 1;
 }

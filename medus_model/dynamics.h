@@ -8,6 +8,6 @@
 #include "random_neighbour.h"
 #include "axelrod.h"
 
-int dynamics(igraph_t *, axl_agent *, int);
+int dynamics(igraph_t , axl_agent *, int);
 
 #endif
