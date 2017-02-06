@@ -12,7 +12,7 @@ int main(void)
 	igraph_rng_seed(igraph_rng_default(), SEED);
 
 	/* Init network topology */
-	init_network(graph, N);
+	init_network(&graph, N);
 
 	/* Init Axelrod agents */
 	agents = (axl_agent *)malloc(sizeof(axl_agent) * N);
@@ -20,7 +20,7 @@ int main(void)
 
 	/* Do STEPS steps of dynamics */
 	for(step = 0; step < STEPS; step++)
-		dynamics(graph, agents, rand());
+		dynamics(&graph, agents, rand());
 	
 	free(agents);
 	igraph_destroy(&graph);

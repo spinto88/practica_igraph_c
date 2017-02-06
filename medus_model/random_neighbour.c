@@ -1,6 +1,6 @@
 #include "random_neighbour.h"
 
-int random_neighbour(igraph_t graph, int id, int random_seed)
+int random_neighbour(igraph_t *graph, int id, int random_seed)
 {
 	int i, ans;
 	int size;
@@ -10,7 +10,7 @@ int random_neighbour(igraph_t graph, int id, int random_seed)
 
 	igraph_rng_seed(igraph_rng_default(), random_seed);
 
-	igraph_neighbors(&graph, &neighbors, id, IGRAPH_ALL);
+	igraph_neighbors(graph, &neighbors, id, IGRAPH_ALL);
 
 	size = igraph_vector_size(&neighbors);
 

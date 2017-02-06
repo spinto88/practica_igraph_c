@@ -1,6 +1,6 @@
 #include "agent_not_in_neighbors.h"
 
-int agent_not_in_neighbors(igraph_t graph, int agent, int seed)
+int agent_not_in_neighbors(igraph_t *graph, int agent, int seed)
 {
 	int i, neighbour_aux;
 	igraph_vector_t neighbors;
@@ -8,11 +8,11 @@ int agent_not_in_neighbors(igraph_t graph, int agent, int seed)
 	srand(seed);
 
 	igraph_vector_init(&neighbors, 0);
-	igraph_neighbors(&graph, &neighbors, agent, IGRAPH_ALL);
+	igraph_neighbors(graph, &neighbors, agent, IGRAPH_ALL);
 
-	neighbour_aux = rand() % graph.n;
+	neighbour_aux = rand() % graph->n;
 	while(igraph_vector_contains(&neighbors, neighbour_aux))
-		neighbour_aux = rand() % graph.n;
+		neighbour_aux = rand() % graph->n;
 
 	igraph_vector_destroy(&neighbors);
 
