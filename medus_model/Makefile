@@ -1,6 +1,6 @@
 
 CC = gcc 
-CFLAGS = -fPIC -O0 -g 
+CFLAGS = -fPIC -O0 -g -Wall 
 LDFLAGS = -lm
 IGRAPH_INCLUDE = -I /usr/local/include/igraph
 IGRAPH_LIB = -L /usr/local/lib/ -ligraph

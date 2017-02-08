@@ -2,8 +2,7 @@
 
 int agent_not_in_neighbors(igraph_t *graph, int agent, int seed)
 {
-	int i, new_neighbour;
-	int eid;
+	int new_neighbour, eid;
 	igraph_vector_t new_edge;
 
 	srand(seed);

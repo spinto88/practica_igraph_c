@@ -7,6 +7,7 @@
 #include "agent_not_in_neighbors.h"
 #include "random_neighbour.h"
 #include "axelrod.h"
+#include "imitation.h"
 
 int dynamics(igraph_t *, axl_agent *, int);
 

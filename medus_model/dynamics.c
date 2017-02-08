@@ -4,8 +4,11 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 {
 	int i, eid;
 	int agent, neighbour, neighbour_aux;
-	double random, hom, hom_aux;
+	double random = 1.00;
+	double hom, hom_aux;
 	int n = graph->n;
+	char *type_edge;
+	char virtual_type[1] = "v";
 
 	srand(seed);
 
@@ -21,9 +24,12 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 		/* Calculate the homophily between them */
 		hom = homophily(agents[agent], agents[neighbour]);
 
+		/* Type of the edge */
+		type_edge = (char *)igraph_cattribute_EAS(graph, "t", eid);
+
 		/* If the edge is a virtual one, first try to rewire to another
 			agent with more homophily */
-		if(igraph_cattribute_EAS(graph, "t", eid) == "v")
+		if(*type_edge == *virtual_type)
 		{
 			// Choose a random agent which is not a neighbour 
 			neighbour_aux = agent_not_in_neighbors(graph, agent, rand());
@@ -53,8 +59,6 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 
 			        igraph_vector_destroy(&es_add);
 			        igraph_es_destroy(&es_kill);
-
-				printf("Rewiring\n");
 
 				continue;
 			}

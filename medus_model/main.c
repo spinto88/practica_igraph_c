@@ -2,7 +2,6 @@
 
 int main(void)
 {
-	int i, j;
 	int step; 
 	FILE *fp;
 	int n;
@@ -20,7 +19,7 @@ int main(void)
 	/* Init network topology */
 	init_network(&graph, N, VIRTUAL_LINKS, SEED);
 
-	fp = fopen("Grafo_inicial.graphml","a");
+	fp = fopen("Grafo_inicial.graphml","w");
 	igraph_write_graph_graphml(&graph, fp, 0);
 	fclose(fp);
 
@@ -35,7 +34,7 @@ int main(void)
 	for(step = 0; step < STEPS; step++)
 	{
 		dynamics(&graph, agents, rand());
-/*		if(step % 1000 == 0)
+		if(step % 1000 == 0)
 		{
 			if(active_links(&graph, agents) == 1)
 				continue;
@@ -45,7 +44,7 @@ int main(void)
 				break;
 			}
 		}
-*/
+
 	}
 /*
 	fp = fopen("States.txt","a");
@@ -57,7 +56,7 @@ int main(void)
 	}
 	fclose(fp);
 */
-	fp = fopen("Grafo.graphml","a");
+	fp = fopen("Grafo.graphml","w");
 	igraph_write_graph_graphml(&graph, fp, 0);
 	fclose(fp);
 	
