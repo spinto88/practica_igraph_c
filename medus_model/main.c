@@ -11,8 +11,11 @@ int main(void)
 	srand(SEED);
 	igraph_rng_seed(igraph_rng_default(), SEED);
 
+	/* Table of attributes */
+        igraph_i_set_attribute_table(&igraph_cattribute_table);
+
 	/* Init network topology */
-	init_network(&graph, N);
+	init_network(&graph, N, 10, SEED);
 
 	/* Init Axelrod agents */
 	agents = (axl_agent *)malloc(sizeof(axl_agent) * N);

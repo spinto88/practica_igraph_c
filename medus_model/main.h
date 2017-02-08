@@ -13,7 +13,7 @@
 
 #define SEED 123457
 
-#define STEPS 10000
+#define STEPS 10
 
 int main(void);
 
