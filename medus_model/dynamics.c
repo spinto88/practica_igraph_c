@@ -54,6 +54,8 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 			        igraph_vector_destroy(&es_add);
 			        igraph_es_destroy(&es_kill);
 
+				printf("Rewiring\n");
+
 				continue;
 			}
 		}

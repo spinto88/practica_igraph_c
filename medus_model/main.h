@@ -6,14 +6,17 @@
 #include <igraph.h>
 
 #include "axelrod.h"
+#include "active_links.h"
 
 #define AXELROD_F 10
-#define AXELROD_Q 20
-#define N 1024
+#define AXELROD_Q 80
+#define N 33*33
 
-#define SEED 123457
+#define VIRTUAL_LINKS 10
 
-#define STEPS 10000
+#define SEED 123458
+
+#define STEPS 50000
 
 int main(void);
 
