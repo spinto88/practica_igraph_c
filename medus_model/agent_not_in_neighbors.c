@@ -2,19 +2,24 @@
 
 int agent_not_in_neighbors(igraph_t *graph, int agent, int seed)
 {
-	int i, neighbour_aux;
-	igraph_vector_t neighbors;
+	int i, new_neighbour;
+	int eid;
+	igraph_vector_t new_edge;
 
 	srand(seed);
 
-	igraph_vector_init(&neighbors, 0);
-	igraph_neighbors(graph, &neighbors, agent, IGRAPH_ALL);
+	igraph_vector_init(&new_edge, 2);
+	VECTOR(new_edge)[0] = agent;
 
-	neighbour_aux = rand() % graph->n;
-	while(igraph_vector_contains(&neighbors, neighbour_aux))
-		neighbour_aux = rand() % graph->n;
+	do
+	{
+		new_neighbour = rand() % graph->n;
+		VECTOR(new_edge)[1] = new_neighbour;
+		igraph_get_eid(graph, &eid, agent, new_neighbour, 0, 0);	
+	}
+	while(eid != -1 || agent == new_neighbour);
 
-	igraph_vector_destroy(&neighbors);
+	igraph_vector_destroy(&new_edge);
 
-	return neighbour_aux;
+	return new_neighbour;
 }

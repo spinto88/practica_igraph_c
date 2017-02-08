@@ -2,7 +2,7 @@
 
 int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 {
-	int i;
+	int i, eid;
 	int agent, neighbour, neighbour_aux;
 	double random, hom, hom_aux;
 	int n = graph->n;
@@ -15,21 +15,15 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 		agent = rand() % n;
 		neighbour = random_neighbour(graph, agent, rand());
 
+		/* Get id of the edge between them */
+		igraph_get_eid(graph, &eid, agent, neighbour, 0, 0);
+
 		/* Calculate the homophily between them */
-		random = (double)rand()/RAND_MAX;
 		hom = homophily(agents[agent], agents[neighbour]);
 
-		/* If a random number is less than the homophily then imitate */
-		if(random <= hom)
-		{
-			if(hom != 1.00)
-				imitation(&(agents[agent]), &(agents[neighbour]), rand());	
-			else
-				continue;
-		}
-		
-		// Else, try to do rewiring 
-		else
+		/* If the edge is a virtual one, first try to rewire to another
+			agent with more homophily */
+		if(igraph_cattribute_EAS(graph, "t", eid) == "v")
 		{
 			// Choose a random agent which is not a neighbour 
 			neighbour_aux = agent_not_in_neighbors(graph, agent, rand());
@@ -45,12 +39,13 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 
 			        igraph_es_t es_kill;
 
-
-
-				// Create the new edge 
+				// Create the new edge and set this one as virtual
 				VECTOR(es_add)[0] = agent;
 				VECTOR(es_add)[1] = neighbour_aux;
 				igraph_add_edges(graph, &es_add, 0);			
+
+				igraph_get_eid(graph, &eid, agent, neighbour_aux, 0, 0);
+				igraph_cattribute_EAS_set(graph, "t", eid, "v");
 
 				// Delete the old edge
 				igraph_es_pairs_small(&es_kill, IGRAPH_UNDIRECTED, agent, neighbour, -1);
@@ -58,11 +53,14 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 
 			        igraph_vector_destroy(&es_add);
 			        igraph_es_destroy(&es_kill);
-			}
-			// Else, continue 
-			else
+
 				continue;
+			}
 		}
+
+		/* If a random number is less than the homophily then imitate */
+		if(random <= hom && hom!= 1.00)
+			imitation(&(agents[agent]), &(agents[neighbour]), rand());	
 	
 	}
 	
