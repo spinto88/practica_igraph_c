@@ -1,5 +1,5 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef GRAPH_AND_DYNAMICS_H
+#define GRAPH_AND_DYNAMICS_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,6 +10,7 @@
 #include "init_network.h"
 #include "init_agents.h"
 #include "dynamics.h"
+#include "add_features_info.h"
 
 #define AXELROD_F 10
 #define AXELROD_Q 50
@@ -19,8 +20,8 @@
 
 #define SEED 123457
 
-#define STEPS 100000
+#define STEPS 50000
 
-int main(void);
+int graph_and_dynamics(axl_agent *, int, int, int);
 
 #endif

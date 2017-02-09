@@ -14,6 +14,9 @@ int init_network(igraph_t *graph, int n, int virtual_links, int seed)
 	igraph_vector_init(&dim, 2);
 	igraph_vector_init(&edge, 2);
 
+        /* Table of attributes */
+        igraph_i_set_attribute_table(&igraph_cattribute_table);
+
 	VECTOR(dim)[0] = n_1_2;
 	VECTOR(dim)[1] = n_1_2;
 

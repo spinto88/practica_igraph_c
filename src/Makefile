@@ -1,4 +1,3 @@
-
 CC = gcc 
 CFLAGS = -fPIC -O0 -g -Wall 
 LDFLAGS = -lm
@@ -9,14 +8,13 @@ SRC = $(wildcard *.c)
 OBJ = $(patsubst %.c, %.o, $(SRC))
 
 .PHONY: all clean
-all: main.e
+all: libc.so
 
-
-main.e: $(OBJ)
-	$(CC) $^ -o $@ $(LDFLAGS) $(IGRAPH_LIB)
+libc.so: $(OBJ)
+	$(CC) -shared $^ -o $@ $(LDFLAGS) $(IGRAPH_LIB)
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) $(IGRAPH_INCLUDE) -c $< -o $@
 
 clean:
-	rm -rfv *.o main.e
+	rm -rfv *.o *.so main.e

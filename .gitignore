@@ -1,2 +1,6 @@
 *.e
 *.o
+*.txt
+*.graphml
+*.zip
+*.out
