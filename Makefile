@@ -8,9 +8,9 @@ SRC = $(wildcard *.c)
 OBJ = $(patsubst %.c, %.o, $(SRC))
 
 .PHONY: all clean
-all: libc.so
+all: libc_actual.so
 
-libc.so: $(OBJ)
+libc_actual.so: $(OBJ)
 	$(CC) -shared $^ -o $@ $(LDFLAGS) $(IGRAPH_LIB)
 
 %.o: %.c %.h
