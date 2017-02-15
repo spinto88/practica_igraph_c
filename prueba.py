@@ -25,9 +25,12 @@ for q in range(10, 201, 10):
             print axl.links_between_regions(),
             print axl.state_multiplicity()
 
-            if q == 10 and vl == 10:
-#                axl.plot()
-		print axl.fragment_identifier(q, vl)
+            if q == 60 and vl == 100:
+		print axl.fragment_identifier(0)
+		print axl.fragment_identifier(1)
+                axl.plot()
+                exit()
 
             os.remove(fname)
+            
 	 

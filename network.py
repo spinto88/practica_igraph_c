@@ -5,8 +5,6 @@ import ctypes as C
 import os
 
 libc = C.CDLL(os.getcwd() + '/src/libc.so')
-libc_actual = C.CDLL(os.getcwd() + '/libc_actual.so')
-
 
 class Axelrod_system(object):
 
@@ -53,21 +51,52 @@ class Axelrod_system(object):
 	return len(states)
 
 
-    def fragment_identifier(self, q, vl, type_cluster = 0):
+    def fragment_identifier(self, type_cluster = 0):
 
-        libc_actual.fragment_identifier.argtypes = [C.c_int, C.c_int, C.c_int, \
-			C.POINTER(C.c_int), C.POINTER(Axl_agent), C.c_int]
+        def is_neighbour(node1, node2, type_clust):
 
-	labels_c = (C.c_int * self.n)()
+            if type_clust != 0:
+                if node1 in self.graph.neighbors(node2):
+                    return 1
+                else:
+                    return 0
+            else:
+		if node1 in self.graph.neighbors(node2):
+                    if self.graph.es[self.graph.get_eid(node1, node2)]['t'] != 'v':
+                        return 1
+                    else:
+                        return 0
 
-	libc_actual.fragment_identifier(q, vl, type_cluster, \
-                                labels_c, self.agents, self.n)
+        def is_same_state(node1, node2):
+        
+            if self.agents[node1].homophily(self.agents[node2]) == 1.00:
+                return 1
+            else:
+                return 0
 
-        labels = [labels_c[i] for i in range(self.n)]
+	labels = [i for i in range(self.n)]
+	ordering = [i for i in range(self.n)]
 
-        return labels
+	j = 0
+	for i in range(self.n):
 
-	
+  	    node1 = ordering[i]
+
+  	    if j == i: j += 1
+
+	    k = j;
+	    while(k < self.n):
+
+	        node2 = ordering[k]
+                if is_neighbour(node1, node2, type_cluster) == 1 \
+                   and is_same_state(node1, node2) == 1:
+                    labels[node2] = labels[node1]
+                    ordering[k], ordering[j] = ordering[j], ordering[k]
+                    j += 1
+
+                k += 1
+
+        return len(set(labels))
 
         
     def plot(self):

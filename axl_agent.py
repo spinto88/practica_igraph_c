@@ -20,3 +20,13 @@ class Axl_agent(C.Structure):
   	    for i in range(f):
 	        self.feat[i] = state[i]
 
+
+    def homophily(self, other):
+
+        hab = 0.00
+	for i in range(self.f):
+            if self.feat[i] == other.feat[i]:
+                hab += 1.00
+
+        return hab / self.f
+
