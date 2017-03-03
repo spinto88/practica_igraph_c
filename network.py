@@ -3,6 +3,7 @@ import random
 from axl_agent import Axl_agent
 import ctypes as C
 import os
+import numpy as np
 
 libc = C.CDLL(os.getcwd() + '/src/libc.so')
 
@@ -96,24 +97,32 @@ class Axelrod_system(object):
 
                 k += 1
 
-        return len(set(labels))
+        agents_per_label = np.bincount(labels, minlength = len(labels))
 
+	# At the end, it returns an array with de number of ocurrences
+	# of clusters with size equal to its index
+        clusters_by_size = np.bincount(agents_per_label, minlength = len(labels) + 1)[1:]
+
+	return clusters_by_size
         
-    def plot(self):
-
-        random.seed(123457)
+    def plot(self, fname = '', without_mayority_vl = 0):
  
         states = [tuple(list(self.agents[i].feat[:10])) \
 		  for i in range(self.n)]
 
-        states = list(set(states))
+        states = sorted(list(set(states)), \
+                 key = lambda x: states.count(x), reverse = True) 
 
         positions = [(vs['pos_x'], vs['pos_y']) for vs in self.graph.vs]
         layout = igraph.Layout(positions)
 
+        random.seed(123457)
+
         color_dict = {}
         for i in range(len(states)):
             color_dict[i] = [random.random() for j in range(3)]
+
+        color_dict[0] = [1.00, 1.00, 1.00]
 
         for i in range(len(states)):
             for j in range(self.n):
@@ -128,5 +137,50 @@ class Axelrod_system(object):
 		    vertex_size = 10.00, \
                     edge_width = [3.00 if es['t'] == 'v' else 1.00 \
                     for es in self.graph.es])
-    
+   
+        if fname != '' and without_mayority_vl == 0: 
+             igraph.plot(self.graph, layout = layout, \
+                    vertex_colors = vertex_colors, \
+		    vertex_size = 10.00, \
+                    edge_width = [3.00 if es['t'] == 'v' else 1.00 \
+                    for es in self.graph.es],
+                    target = fname)
 
+        if fname != '' and without_mayority_vl == 1:
+
+             edge_width = []
+             for es in self.graph.es:
+                 if es['t'] == 'v' and self.agents[es.target].feat[:10] != list(states[0]) and self.agents[es.source].feat[:10] != list(states[0]):
+                     edge_width.append(3.00)
+                 elif es['t'] == 'p':
+                     edge_width.append(1.00)
+                 else:
+                     edge_width.append(0.00)
+
+             igraph.plot(self.graph, layout = layout, \
+                    vertex_colors = vertex_colors, \
+		    vertex_size = 10.00, \
+                    edge_width = edge_width, \
+                    target = fname)
+
+        if fname != '' and without_mayority_vl == 2:
+
+             edge_width = []
+             for es in self.graph.es:
+                 if self.agents[es.target].feat[:10] != list(states[1]) or self.agents[es.source].feat[:10] != list(states[1]):
+                     edge_width.append(0.00)
+                 else:
+                     edge_width.append(3.00)
+
+             vertex_size = []
+             for i in range(len(self.graph.vs)):
+                 if self.agents[i].feat[:10] != list(states[1]):
+                     vertex_size.append(0.00)
+                 else:
+                     vertex_size.append(10.00)
+
+             igraph.plot(self.graph, layout = layout, \
+                    vertex_colors = vertex_colors, \
+		    vertex_size = vertex_size, \
+                    edge_width = edge_width, \
+                    target = fname)

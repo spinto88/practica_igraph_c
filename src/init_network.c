@@ -1,10 +1,10 @@
 #include "init_network.h"
 
-int init_network(igraph_t *graph, int n, int virtual_links, int seed)
+int init_network(igraph_t *graph, int dim1, int dim2, int virtual_links, int seed)
 {
 	int i, eid;
 	int es_all;
-	int n_1_2 = (int)sqrt(n);
+	int n = dim1 * dim2;
 
 	srand(seed);
 
@@ -17,20 +17,20 @@ int init_network(igraph_t *graph, int n, int virtual_links, int seed)
         /* Table of attributes */
         igraph_i_set_attribute_table(&igraph_cattribute_table);
 
-	VECTOR(dim)[0] = n_1_2;
-	VECTOR(dim)[1] = n_1_2;
+	VECTOR(dim)[0] = dim1;
+	VECTOR(dim)[1] = dim2;
 
-	igraph_lattice(graph, &dim, 0, 0, 0, 0);
+	igraph_lattice(graph, &dim, 2, 0, 0, 0);
 	for(i = 0; i < n; i++)
 	{
-		igraph_cattribute_VAN_set(graph, "pos_x", i, i % n_1_2);
-		igraph_cattribute_VAN_set(graph, "pos_y", i, i / n_1_2);
+		igraph_cattribute_VAN_set(graph, "pos_x", i, i / dim1);
+		igraph_cattribute_VAN_set(graph, "pos_y", i, i % dim1);
 	}
-
+       
 	// Make a middle barrier i.e. delete the middle vertices
-	for(i = 0; i < n_1_2; i++)
-		igraph_delete_vertices(graph, igraph_vss_1(i * n_1_2 + n_1_2 / 2 - i));
-
+	for(i = 0; i < 2*dim1; i++)
+		igraph_delete_vertices(graph, igraph_vss_1(dim2/2 * dim1));
+       
 	
 	// Set as personal edges the lattice's ones
 	es_all = igraph_ecount(graph);

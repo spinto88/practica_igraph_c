@@ -14,14 +14,16 @@
 
 #define AXELROD_F 10
 #define AXELROD_Q 50
-#define N 33*33
 
-#define VIRTUAL_LINKS 10
+#define DIM_1 16
+#define DIM_2 (2 * DIM_1 + 2)
+
+#define VIRTUAL_LINKS 0
 
 #define SEED 123457
 
 #define STEPS 50000
 
-int graph_and_dynamics(axl_agent *, int, int, int);
+int graph_and_dynamics(axl_agent *, int, int);
 
 #endif
