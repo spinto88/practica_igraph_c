@@ -1,10 +1,10 @@
 #include "init_network.h"
 
-int init_network(igraph_t *graph, int dim1, int dim2, int virtual_links, int seed)
+int init_network(igraph_t *graph, int n, int virtual_links, int seed)
 {
 	int i, eid;
 	int es_all;
-	int n = dim1 * dim2;
+	int n2 = n * n;
 
 	srand(seed);
 
@@ -17,25 +17,50 @@ int init_network(igraph_t *graph, int dim1, int dim2, int virtual_links, int see
         /* Table of attributes */
         igraph_i_set_attribute_table(&igraph_cattribute_table);
 
-	VECTOR(dim)[0] = dim1;
-	VECTOR(dim)[1] = dim2;
+	VECTOR(dim)[0] = n;
+	VECTOR(dim)[1] = n;
 
-	igraph_lattice(graph, &dim, 2, 0, 0, 0);
-	for(i = 0; i < n; i++)
+	igraph_lattice(graph, &dim, 1, 0, 0, 1);
+	for(i = 0; i < n2; i++)
 	{
-		igraph_cattribute_VAN_set(graph, "pos_x", i, i / dim1);
-		igraph_cattribute_VAN_set(graph, "pos_y", i, i % dim1);
-	}
-       
-	// Make a middle barrier i.e. delete the middle vertices
-	for(i = 0; i < 2*dim1; i++)
-		igraph_delete_vertices(graph, igraph_vss_1(dim2/2 * dim1));
-       
+		igraph_cattribute_VAN_set(graph, "pos_x", i, i / n);
+		igraph_cattribute_VAN_set(graph, "pos_y", i, i % n);
+	} 
 	
 	// Set as personal edges the lattice's ones
 	es_all = igraph_ecount(graph);
 	for(eid = 0; eid < es_all; eid++)
 	        igraph_cattribute_EAS_set(graph, "t", eid, "p");
+
+	// Add the more contact links 
+	for(i = 0; i < n2; i++)
+	{
+		do
+		{
+			VECTOR(edge)[0] = i;
+			VECTOR(edge)[1] = (i%n+1)%n + ((i/n+1)%n) * n;	
+			igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+		}
+		while((eid != -1) || (VECTOR(edge)[0] == VECTOR(edge)[1]));
+
+		igraph_add_edges(graph, &edge, 0);
+		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+
+	        igraph_cattribute_EAS_set(graph, "t", eid, "p");
+
+		do
+		{
+			VECTOR(edge)[0] = i;
+			VECTOR(edge)[1] = (i%n-1 + n)%n + ((i/n+1)%n) * n;	
+			igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+		}
+		while((eid != -1) || (VECTOR(edge)[0] == VECTOR(edge)[1]));
+
+		igraph_add_edges(graph, &edge, 0);
+		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+
+	        igraph_cattribute_EAS_set(graph, "t", eid, "p");
+	}
 
 	// Add the virtual links 
 	for(i = 0; i < virtual_links; i++)

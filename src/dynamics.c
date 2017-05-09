@@ -14,7 +14,7 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 
 	for(i=0; i<n; i++)
 	{
-		/* Choose one agent and a random network */
+		/* Choose one agent and a random neighbour */
 		agent = rand() % n;
 		neighbour = random_neighbour(graph, agent, rand());
 
@@ -23,6 +23,8 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 
 		/* Calculate the homophily between them */
 		hom = homophily(agents[agent], agents[neighbour]);
+		if (hom <= (1.00/agents[agent].f))
+			hom = 0.00;
 
 		/* Type of the edge */
 		type_edge = (char *)igraph_cattribute_EAS(graph, "t", eid);

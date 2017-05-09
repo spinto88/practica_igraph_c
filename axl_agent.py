@@ -16,6 +16,8 @@ class Axl_agent(C.Structure):
 	if state == []:
   	    for i in range(f):
 	        self.feat[i] = rand.randint(0, q-1)
+                if i == 0:
+                    self.feat[i] = rand.randint(0,1)
         else:
   	    for i in range(f):
 	        self.feat[i] = state[i]
