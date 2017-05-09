@@ -62,6 +62,14 @@ int init_network(igraph_t *graph, int n, int virtual_links, int seed)
 	        igraph_cattribute_EAS_set(graph, "t", eid, "p");
 	}
 
+	// Set a fraction of personal edges rewirible
+	es_all = igraph_ecount(graph);
+	for(eid = 0; eid < es_all; eid++)
+	{
+		if(((double)rand())/RAND_MAX < 0.1)
+		        igraph_cattribute_EAS_set(graph, "t", eid, "pr");
+	}
+
 	// Add the virtual links 
 	for(i = 0; i < virtual_links; i++)
 	{

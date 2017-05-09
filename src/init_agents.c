@@ -12,6 +12,11 @@ int init_agents(axl_agent *agents, int n, int f, int q, int seed)
 		agents[i].q = q;		
 		agents[i].feat = (int *)malloc(sizeof(int) * f);
 
+		if(((double)rand())/RAND_MAX < 0.01)
+			agents[i].zealot = 1;
+		else
+			agents[i].zealot = 0;
+
 		for(j=0; j<f; j++)
 		{
 			agents[i].feat[j] = rand() % q;

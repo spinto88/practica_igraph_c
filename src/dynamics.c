@@ -9,6 +9,7 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 	int n = graph->n;
 	char *type_edge;
 	char virtual_type[1] = "v";
+	char personal_rew_type[2] = "pr";
 
 	srand(seed);
 
@@ -65,13 +66,65 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 				continue;
 			}
 		}
-		
-		random = ((double)rand())/RAND_MAX;
+		/* If the edge is a personal one but can rewire, it will try to do with a virtual link */
+		else if(*type_edge == *personal_rew_type)
+		{
+			// Choose a random agent which is a virtual neighbour
+			neighbour_aux = virtual_neighbour(graph, agent, rand());
 
-		/* If a random number is less than the homophily then imitate */
-		if(random <= hom && hom != 1.00)
-			imitation(agents + agent, agents + neighbour, rand());	
-	
+			if(neighbour_aux == -1)
+				continue;
+
+			// Calculate the homophily between the new agent and the first one 
+			hom_aux = homophily(agents[agent], agents[neighbour_aux]);
+			
+			// If the new homophily is larger than the old one, do a rewiring 
+			if(hom_aux > hom)
+			{
+			        igraph_vector_t es_add;
+			        igraph_vector_init(&es_add, 2);
+
+			        igraph_es_t es_kill;
+
+				// Delete the old edge
+				igraph_es_pairs_small(&es_kill, IGRAPH_UNDIRECTED, agent, neighbour_aux, -1);
+				igraph_delete_edges(graph, es_kill);			
+
+				// Create the new edge and set this one as personal rewirible
+				VECTOR(es_add)[0] = agent;
+				VECTOR(es_add)[1] = neighbour_aux;
+				igraph_add_edges(graph, &es_add, 0);			
+
+				igraph_get_eid(graph, &eid, agent, neighbour_aux, 0, 0);
+				igraph_cattribute_EAS_set(graph, "t", eid, "pr");
+
+				// Delete the old edge
+				igraph_es_pairs_small(&es_kill, IGRAPH_UNDIRECTED, agent, neighbour, -1);
+				igraph_delete_edges(graph, es_kill);			
+
+				// Create the new edge and set this one as virtual
+				VECTOR(es_add)[0] = agent;
+				VECTOR(es_add)[1] = neighbour;
+				igraph_add_edges(graph, &es_add, 0);			
+
+				igraph_get_eid(graph, &eid, agent, neighbour, 0, 0);
+				igraph_cattribute_EAS_set(graph, "t", eid, "v");
+
+			        igraph_vector_destroy(&es_add);
+			        igraph_es_destroy(&es_kill);
+
+				continue;
+			}
+		}
+
+		else		
+		{
+			random = ((double)rand())/RAND_MAX;
+
+			/* If a random number is less than the homophily then imitate */
+			if(random <= hom && hom != 1.00)
+				imitation(agents + agent, agents + neighbour, rand());	
+		}	
 	}
 	
 	return 1;
