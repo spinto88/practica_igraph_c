@@ -9,7 +9,7 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 	int n = graph->n;
 	char *type_edge;
 	char virtual_type[1] = "v";
-	char personal_rew_type[2] = "pr";
+	char personal_rew_type[1] = "r";
 
 	srand(seed);
 
@@ -96,7 +96,7 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 				igraph_add_edges(graph, &es_add, 0);			
 
 				igraph_get_eid(graph, &eid, agent, neighbour_aux, 0, 0);
-				igraph_cattribute_EAS_set(graph, "t", eid, "pr");
+				igraph_cattribute_EAS_set(graph, "t", eid, "r");
 
 				// Delete the old edge
 				igraph_es_pairs_small(&es_kill, IGRAPH_UNDIRECTED, agent, neighbour, -1);
@@ -116,7 +116,6 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 				continue;
 			}
 		}
-
 		else		
 		{
 			random = ((double)rand())/RAND_MAX;

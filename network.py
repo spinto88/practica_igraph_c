@@ -132,12 +132,16 @@ class Axelrod_system(object):
         vertex_colors = [self.graph.vs[i]['color'] \
                         for i in range(len(self.graph.vs))]
 
+        edge_width_dict = {'r': 3.00, 'p': 1.00, 'v':0.00}
+
+
         igraph.plot(self.graph, layout = layout, \
                     vertex_colors = vertex_colors, \
 		    vertex_size = 10.00, \
-                    edge_width = [3.00 if es['t'] == 'v' else 1.00 \
+                    edge_width = [edge_width_dict[es['t']] \
                     for es in self.graph.es])
-   
+  
+        """ 
         if fname != '' and without_mayority_vl == 0: 
              igraph.plot(self.graph, layout = layout, \
                     vertex_colors = vertex_colors, \
@@ -184,3 +188,4 @@ class Axelrod_system(object):
 		    vertex_size = vertex_size, \
                     edge_width = edge_width, \
                     target = fname)
+        """

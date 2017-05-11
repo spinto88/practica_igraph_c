@@ -5,7 +5,8 @@ class Axl_agent(C.Structure):
 
     _fields_ = [('f', C.c_int),
   	        ('q', C.c_int),
-	        ('feat', C.POINTER(C.c_int))]
+	        ('feat', C.POINTER(C.c_int)),
+                ('zealot', C.c_int)]
 
     def __init__(self, f, q, state = []):
 
@@ -17,10 +18,16 @@ class Axl_agent(C.Structure):
   	    for i in range(f):
 	        self.feat[i] = rand.randint(0, q-1)
                 if i == 0:
-                    self.feat[i] = rand.randint(0,1)
+                    self.feat[i] = 1
         else:
   	    for i in range(f):
 	        self.feat[i] = state[i]
+
+	if rand.random() < 0.01:
+		self.zealot = 1
+		self.feat[0] = 0
+	else:
+		self.zealot = 0
 
 
     def homophily(self, other):

@@ -67,7 +67,7 @@ int init_network(igraph_t *graph, int n, int virtual_links, int seed)
 	for(eid = 0; eid < es_all; eid++)
 	{
 		if(((double)rand())/RAND_MAX < 0.1)
-		        igraph_cattribute_EAS_set(graph, "t", eid, "pr");
+		        igraph_cattribute_EAS_set(graph, "t", eid, "r");
 	}
 
 	// Add the virtual links 

@@ -1,30 +1,24 @@
-import ctypes as C
 import random as rand
-from axl_agent import *
 from zipfile import ZipFile
 import os
+from dynamics import dynamics
 
-libc = C.CDLL('src/libc.so')
-libc.graph_and_dynamics.argtypes = [C.POINTER(Axl_agent), C.c_int, C.c_int]
-libc.graph_and_dynamics.restype = C.c_int
-
-dim = 10
-m = dim * dim
-agents = (Axl_agent * m)()
-
+N = 400
 F = 11
-q = 100
-virtual_links = 0
 
-for i in range(m):
-    agents[i] = Axl_agent(F, q)
+virtual_links = N * 4
 
-libc.graph_and_dynamics(agents, virtual_links, rand.randint(0, 10000))
+steps = 50000
 
-"""            
-myzip = ZipFile('Graphs_prueba' + str(conf) + '.zip', 'a')
-            myzip.write('Graph2_q' + str(q) + '_vl' + str(virtual_links) + '.graphml')
-            myzip.close()
+rand.seed(123457)
 
-            os.remove('Graph2_q' + str(q) + '_vl' + str(virtual_links) + '.graphml')
-"""         
+for conf in range(100):
+
+    for q in range(10, 500, 50):
+
+        dynamics(N, F, q, virtual_links, steps)
+           
+    myzip = ZipFile('Graphs_prueba' + str(conf) + '.zip', 'a')
+    myzip.write('Graph_q' + str(q) + '_vl' + str(virtual_links) + '.graphml')
+    myzip.close()
+    os.remove('Graph_q' + str(q) + '_vl' + str(virtual_links) + '.graphml')        

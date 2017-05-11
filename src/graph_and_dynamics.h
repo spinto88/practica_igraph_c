@@ -12,17 +12,17 @@
 #include "dynamics.h"
 #include "add_features_info.h"
 
-#define AXELROD_F 11
-#define AXELROD_Q 20
+//#define AXELROD_F 11
+//#define AXELROD_Q 20
 
-#define DIM 10
+//#define DIM 10
 
-#define VIRTUAL_LINKS 0
+//#define VIRTUAL_LINKS 0
 
-#define SEED 123457
+//#define SEED 123457
 
-#define STEPS 10000
+//#define STEPS 10000
 
-int graph_and_dynamics(axl_agent *, int, int);
+int graph_and_dynamics(axl_agent *, int, int, int, int);
 
 #endif

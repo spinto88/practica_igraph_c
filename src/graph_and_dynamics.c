@@ -1,6 +1,6 @@
 #include "graph_and_dynamics.h"
 
-int graph_and_dynamics(axl_agent *agents, int virtual_links, int seed)
+int graph_and_dynamics(axl_agent *agents, int dim, int virtual_links, int steps, int seed)
 {
 	int step; 
 	FILE *fp;
@@ -15,13 +15,13 @@ int graph_and_dynamics(axl_agent *agents, int virtual_links, int seed)
         igraph_i_set_attribute_table(&igraph_cattribute_table);
 
 	/* Init network topology */
-	init_network(&graph, DIM, virtual_links, seed);
+	init_network(&graph, dim, virtual_links, rand());
 
 	/* Do STEPS steps of dynamics */
-	for(step = 0; step < STEPS; step++)
+	for(step = 0; step < steps; step++)
 	{
 		dynamics(&graph, agents, rand());
-		if(step % 1000 == 0)
+		if(step % 100 == 0)
 		{
 			if(active_links(&graph, agents) == 1)
 				continue;

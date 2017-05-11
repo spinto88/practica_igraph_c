@@ -2,7 +2,7 @@ from network import Axelrod_system as Axl
 import zipfile
 import os
 
-q = 100 
+q = 20 
 vl = 0 
 conf = 0
 	 
