@@ -19,15 +19,14 @@ class Axl_agent(C.Structure):
 	        self.feat[i] = rand.randint(0, q-1)
                 if i == 0:
                     self.feat[i] = 1
+	        if rand.random() < 0.01:
+		    self.zealot = 1
+   		    self.feat[0] = 0
+	        else:
+		    self.zealot = 0
         else:
   	    for i in range(f):
 	        self.feat[i] = state[i]
-
-	if rand.random() < 0.01:
-		self.zealot = 1
-		self.feat[0] = 0
-	else:
-		self.zealot = 0
 
 
     def homophily(self, other):
