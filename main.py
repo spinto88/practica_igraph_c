@@ -3,19 +3,19 @@ from zipfile import ZipFile
 import os
 from dynamics import dynamics
 
-N = 2500
+N = 400
 F = 11
 
 virtual_links = N * 4
 
-steps = 0
-phi = 0.10
+steps = 10000
+phi = 0.00
 
 rand.seed(123457)
 
 for conf in range(100):
 
-    for q in [30]: #range(10, 500, 50):
+    for q in [100]: #range(10, 500, 50):
 
         dynamics(N, F, q, virtual_links, phi, steps)
 

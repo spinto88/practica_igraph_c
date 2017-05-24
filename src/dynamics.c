@@ -116,14 +116,14 @@ int dynamics(igraph_t *graph, axl_agent *agents, double phi, int seed)
 				continue;
 			}
 		}
-		else		
-		{
-			random = ((double)rand())/RAND_MAX;
+//		else		
+//		{
+ 		random = ((double)rand())/RAND_MAX;
 
-			/* If a random number is less than the homophily then imitate */
-			if(random <= hom && hom != 1.00)
-				imitation(agents + agent, agents + neighbour, phi, rand());	
-		}	
+		/* If a random number is less than the homophily then imitate */
+		if(random <= hom && hom != 1.00)
+			imitation(agents + agent, agents + neighbour, phi, rand());	
+//		}	
 	}
 	
 	return 1;
