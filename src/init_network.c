@@ -20,7 +20,8 @@ int init_network(igraph_t *graph, int n, int virtual_links, int seed)
 	VECTOR(dim)[0] = n;
 	VECTOR(dim)[1] = n;
 
-	igraph_lattice(graph, &dim, 1, 0, 0, 1);
+        /* Non-periodic lattice */
+	igraph_lattice(graph, &dim, 1, 0, 0, 0);
 	for(i = 0; i < n2; i++)
 	{
 		igraph_cattribute_VAN_set(graph, "pos_x", i, i / n);
@@ -33,33 +34,29 @@ int init_network(igraph_t *graph, int n, int virtual_links, int seed)
 	        igraph_cattribute_EAS_set(graph, "t", eid, "p");
 
 	// Add the more contact links 
-	for(i = 0; i < n2; i++)
+	for(i = 0; i < (n2-n); i++)
 	{
-		do
+		if((i%n) != (n-1))
 		{
 			VECTOR(edge)[0] = i;
 			VECTOR(edge)[1] = (i%n+1)%n + ((i/n+1)%n) * n;	
+
+			igraph_add_edges(graph, &edge, 0);
 			igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+
+	        	igraph_cattribute_EAS_set(graph, "t", eid, "p");
 		}
-		while((eid != -1) || (VECTOR(edge)[0] == VECTOR(edge)[1]));
 
-		igraph_add_edges(graph, &edge, 0);
-		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
-
-	        igraph_cattribute_EAS_set(graph, "t", eid, "p");
-
-		do
+		if((i%n) != 0)
 		{
 			VECTOR(edge)[0] = i;
 			VECTOR(edge)[1] = (i%n-1 + n)%n + ((i/n+1)%n) * n;	
+
+			igraph_add_edges(graph, &edge, 0);
 			igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+	
+		        igraph_cattribute_EAS_set(graph, "t", eid, "p");
 		}
-		while((eid != -1) || (VECTOR(edge)[0] == VECTOR(edge)[1]));
-
-		igraph_add_edges(graph, &edge, 0);
-		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
-
-	        igraph_cattribute_EAS_set(graph, "t", eid, "p");
 	}
 
 	// Set a fraction of personal edges rewirible

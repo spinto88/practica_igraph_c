@@ -9,45 +9,31 @@ libc = C.CDLL(os.getcwd() + '/src/libc.so')
 
 class Axelrod_system(object):
 
-    def __init__(self, file_graphml):
+    def __init__(self, file_graphml, f, q):
 
 	self.fname = file_graphml
 
         self.graph = igraph.Graph.Read_GraphML(file(file_graphml, 'r'))
 
 	self.n = len(self.graph.vs)
+        self.f = f
+        self.q = q
   	
 	self.agents = (Axl_agent * self.n)()
 
 	for i in range(self.n):
     
-  	    state = [int(self.graph.vs[i]['feat' + str(f)]) \
-                                      for f in range(10)]
+  	    state = [int(self.graph.vs[i]['feat' + str(feat)]) \
+                                      for feat in range(self.f)]
+  	    zealot = int(self.graph.vs[i]['zealot'])
         
-            self.agents[i] = Axl_agent(len(state), 0, state = state)
+            self.agents[i] = Axl_agent(len(state), q, state = state, zealot = zealot)
 
-
-    def links_between_regions(self):
-        
-	for i in range(self.n):
-            if self.graph.vs[i]['pos_x'] < 16:
-                self.graph.vs[i]['region'] = 'I'
-            else:
-                self.graph.vs[i]['region'] = 'II'
-
-        ans = 0
-
-        for es in self.graph.es:
-            if self.graph.vs[es.source]['region'] != \
-               self.graph.vs[es.target]['region']:
-                ans += 1
-
-        return ans
 
 
     def state_multiplicity(self):            
 
-        states = set([tuple(self.agents[i].feat[:10]) for i in range(self.n)])
+        states = set([tuple(self.agents[i].feat[1:self.f]) for i in range(self.n)])
         
 	return len(states)
 
@@ -134,10 +120,9 @@ class Axelrod_system(object):
 
         edge_width_dict = {'r': 3.00, 'p': 1.00, 'v':0.00}
 
-
         igraph.plot(self.graph, layout = layout, \
                     vertex_colors = vertex_colors, \
-		    vertex_size = 10.00, \
+		    vertex_size = 2.00, \
                     edge_width = [edge_width_dict[es['t']] \
                     for es in self.graph.es])
   

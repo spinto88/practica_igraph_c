@@ -20,9 +20,5 @@ def dynamics(n = 100, f = 11, q = 20, virtual_links = 0, steps = 10000):
     for i in range(m):
         agents[i] = Axl_agent(f, q)
 
-    print agents[0].feat[:f]
-
     libc.graph_and_dynamics(agents, dim, virtual_links, \
                          steps, rand.randint(0, 10000))
-
-    print agents[0].feat[:f]

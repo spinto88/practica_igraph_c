@@ -8,7 +8,7 @@ class Axl_agent(C.Structure):
 	        ('feat', C.POINTER(C.c_int)),
                 ('zealot', C.c_int)]
 
-    def __init__(self, f, q, state = []):
+    def __init__(self, f, q, state = [], zealot = 0):
 
         self.f = f
         self.q = q
@@ -27,7 +27,7 @@ class Axl_agent(C.Structure):
         else:
   	    for i in range(f):
 	        self.feat[i] = state[i]
-
+            self.zealot = zealot
 
     def homophily(self, other):
 

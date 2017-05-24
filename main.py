@@ -8,7 +8,7 @@ F = 11
 
 virtual_links = N * 4
 
-steps = 1000
+steps = 0
 
 rand.seed(123457)
 
