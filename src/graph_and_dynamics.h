@@ -23,6 +23,6 @@
 
 //#define STEPS 10000
 
-int graph_and_dynamics(axl_agent *, int, int, int, int);
+int graph_and_dynamics(axl_agent *, int, int, double, int, int);
 
 #endif

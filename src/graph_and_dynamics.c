@@ -1,6 +1,6 @@
 #include "graph_and_dynamics.h"
 
-int graph_and_dynamics(axl_agent *agents, int dim, int virtual_links, int steps, int seed)
+int graph_and_dynamics(axl_agent *agents, int dim, int virtual_links, double phi, int steps, int seed)
 {
 	int step; 
 	FILE *fp;
@@ -20,7 +20,7 @@ int graph_and_dynamics(axl_agent *agents, int dim, int virtual_links, int steps,
 	/* Do STEPS steps of dynamics */
 	for(step = 0; step < steps; step++)
 	{
-		dynamics(&graph, agents, rand());
+		dynamics(&graph, agents, phi, rand());
 		if(step % 100 == 0)
 		{
 			if(active_links(&graph, agents) == 1)

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "axelrod.h"
 
-int imitation(axl_agent *, axl_agent *, int);
+int imitation(axl_agent *, axl_agent *, double, int);
 
 #endif
 

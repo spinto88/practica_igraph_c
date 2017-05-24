@@ -9,6 +9,6 @@
 #include "axelrod.h"
 #include "imitation.h"
 
-int dynamics(igraph_t *, axl_agent *, int);
+int dynamics(igraph_t *, axl_agent *, double, int);
 
 #endif

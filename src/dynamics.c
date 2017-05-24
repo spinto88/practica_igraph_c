@@ -1,6 +1,6 @@
 #include "dynamics.h"
 
-int dynamics(igraph_t *graph, axl_agent *agents, int seed)
+int dynamics(igraph_t *graph, axl_agent *agents, double phi, int seed)
 {
 	int i, eid;
 	int agent, neighbour, neighbour_aux;
@@ -122,7 +122,7 @@ int dynamics(igraph_t *graph, axl_agent *agents, int seed)
 
 			/* If a random number is less than the homophily then imitate */
 			if(random <= hom && hom != 1.00)
-				imitation(agents + agent, agents + neighbour, rand());	
+				imitation(agents + agent, agents + neighbour, phi, rand());	
 		}	
 	}
 	
