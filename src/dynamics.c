@@ -24,7 +24,7 @@ int dynamics(igraph_t *graph, axl_agent *agents, double phi, int seed)
 
 		/* Calculate the homophily between them */
 		hom = homophily(agents[agent], agents[neighbour]);
-		if (hom <= (1.00/agents[agent].f))
+		if (hom < (2.00/agents[agent].f))
 			hom = 0.00;
 
 		/* Type of the edge */
@@ -39,6 +39,8 @@ int dynamics(igraph_t *graph, axl_agent *agents, double phi, int seed)
 
 			// Calculate the homophily between the new agent and the first one 
 			hom_aux = homophily(agents[agent], agents[neighbour_aux]);
+			if (hom_aux < (2.00/agents[agent].f))
+				hom_aux = 0.00;
 			
 			// If the new homophily is larger than the old one, do a rewiring 
 			if(hom_aux > hom)
@@ -76,6 +78,8 @@ int dynamics(igraph_t *graph, axl_agent *agents, double phi, int seed)
 			{
 				// Calculate the homophily between the new agent and the first one 
 				hom_aux = homophily(agents[agent], agents[neighbour_aux]);
+				if (hom_aux < (2.00/agents[agent].f))
+					hom_aux = 0.00;
 			}	
 			else
 				hom_aux = 0.00;

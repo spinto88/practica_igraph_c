@@ -23,6 +23,8 @@ int imitation(axl_agent *agent1, axl_agent *agent2, double phi, int seed)
 				agent1->feat[feat] = agent2->feat[feat];		
 				return 1;
 			}
+			else
+				return 0;
 		}
 		else
 		{

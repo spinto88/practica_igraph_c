@@ -2,22 +2,28 @@ import random as rand
 from zipfile import ZipFile
 import os
 from dynamics import dynamics
+import numpy as np
 
-N = 1024
+N = 400
 F = 11
 
 virtual_links = N * 4
 
 steps = 10000
-phi = 0.00
+phi = 0.04
 
-rand.seed(123457)
+seed = 123451
+
+rand.seed(seed)
+np.random.seed(seed)
+zealots_fraction = 0.05
+
 
 for conf in range(100):
 
-    for q in [200]: #range(10, 500, 50):
+    for q in [20]: #range(10, 500, 50):
 
-        dynamics(N, F, q, virtual_links, phi, steps)
+        dynamics(N, F, q, virtual_links, phi, zealots_fraction, steps)
 
     exit()
     """           
