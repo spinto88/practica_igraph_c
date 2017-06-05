@@ -26,7 +26,7 @@ int active_links(igraph_t *graph, axl_agent *agents)
 			if (i < neighbour)
 			{
 				hab = homophily(agents[i], agents[neighbour]);
-				if(hab <= (1.00/agents[i].f))
+				if(hab <= (2.00/agents[i].f))
 					hab = 0.00;
 
 				if((0.00 < hab) && (hab < 1.00))
