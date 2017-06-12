@@ -1,6 +1,6 @@
 #include "init_network.h"
 
-int init_network(igraph_t *graph, int n, int virtual_links, int seed)
+int init_network(igraph_t *graph, int n, int virtual_links, int virtual_type, int seed)
 {
 	int i, eid;
 	int es_all;
@@ -66,10 +66,13 @@ int init_network(igraph_t *graph, int n, int virtual_links, int seed)
 		if(((double)rand())/RAND_MAX < 0.1)
 		        igraph_cattribute_EAS_set(graph, "t", eid, "r");
 	}
-
-	// Add the virtual links 
-	for(i = 0; i < virtual_links; i++)
+        
+	// Add the virtual links
+        if(virtual_type == 0)
+	// Add virtual links in a random way
 	{
+	    for(i = 0; i < virtual_links; i++)
+   	    {
 		do
 		{
 			VECTOR(edge)[0] = rand() % graph->n;
@@ -82,6 +85,86 @@ int init_network(igraph_t *graph, int n, int virtual_links, int seed)
 		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
 
 	        igraph_cattribute_EAS_set(graph, "t", eid, "v");
+	    }
+	}
+        else if(virtual_type == 1 || virtual_type == 2)
+	// Add virtual links in a static way 
+	{
+	if(virtual_type == 1)
+	{
+
+	// Add the virtual statics links
+	for(i = 0; i < n2; i++)
+	{
+		VECTOR(edge)[0] = i;
+
+		VECTOR(edge)[1] = (i%n+2)%n + ((i/n+2)%n) * n;	
+
+		igraph_add_edges(graph, &edge, 0);
+		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+
+	       	igraph_cattribute_EAS_set(graph, "t", eid, "p");
+
+		VECTOR(edge)[1] = (i%n-2+n)%n + ((i/n+2)%n) * n;	
+
+		igraph_add_edges(graph, &edge, 0);
+		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+
+	       	igraph_cattribute_EAS_set(graph, "t", eid, "p");
+	
+		VECTOR(edge)[1] = (i%n+2)%n + ((i/n)%n) * n;	
+
+		igraph_add_edges(graph, &edge, 0);
+		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+
+	       	igraph_cattribute_EAS_set(graph, "t", eid, "p");
+
+		VECTOR(edge)[1] = (i%n)%n + ((i/n+2)%n) * n;	
+
+		igraph_add_edges(graph, &edge, 0);
+		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+
+	       	igraph_cattribute_EAS_set(graph, "t", eid, "p");
+	}
+
+	}
+	else if(virtual_type == 2)
+	{
+
+	// Add the virtual statics links
+	for(i = 0; i < n2; i++)
+	{
+		VECTOR(edge)[0] = i;
+
+		VECTOR(edge)[1] = (i%n+2)%n + ((i/n+2)%n) * n;	
+
+		igraph_add_edges(graph, &edge, 0);
+		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+
+	       	igraph_cattribute_EAS_set(graph, "t", eid, "v");
+
+		VECTOR(edge)[1] = (i%n-2+n)%n + ((i/n+2)%n) * n;	
+
+		igraph_add_edges(graph, &edge, 0);
+		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+
+	       	igraph_cattribute_EAS_set(graph, "t", eid, "v");
+	
+		VECTOR(edge)[1] = (i%n+2)%n + ((i/n)%n) * n;	
+
+		igraph_add_edges(graph, &edge, 0);
+		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+
+	       	igraph_cattribute_EAS_set(graph, "t", eid, "v");
+
+		VECTOR(edge)[1] = (i%n)%n + ((i/n+2)%n) * n;	
+
+		igraph_add_edges(graph, &edge, 0);
+		igraph_get_eid(graph, &eid, VECTOR(edge)[0], VECTOR(edge)[1], 0, 0);
+
+	       	igraph_cattribute_EAS_set(graph, "t", eid, "v");
+	}
+	}	
 	}
 
 	igraph_vector_destroy(&dim);

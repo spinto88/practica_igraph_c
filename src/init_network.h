@@ -5,6 +5,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-int init_network(igraph_t *, int, int, int);
+int init_network(igraph_t *, int, int, int, int);
 
 #endif
